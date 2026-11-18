@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тест «Отечественная война 1812 года»</title>
+<style>
+  :root{ --dark:#14291F; --dark2:#1C3628; --green:#2F5D46; --gold:#C9A227; --gold-soft:#E3CB7A;
+    --text:#1E2A24; --muted:#6F7D75; --card:#F4F6F4; --line:#DCE3DD; }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+    background:linear-gradient(160deg,#0F2019 0%,var(--dark) 45%,var(--dark2) 100%);
+    font-family:'Segoe UI',Calibri,Arial,sans-serif;color:var(--text)}
+  .quiz{width:100%;max-width:620px;background:#fff;border-radius:18px;padding:34px 30px 30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .top h1{font-family:Georgia,serif;font-size:21px;color:var(--green)}
+  .top .cnt{font-size:13.5px;color:var(--muted);white-space:nowrap}
+  .bar{height:6px;background:#E8ECE9;border-radius:4px;overflow:hidden;margin-bottom:24px}
+  .bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:4px;transition:width .3s}
+  .qtext{font-family:Georgia,serif;font-size:21px;line-height:1.35;margin-bottom:18px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);
+    border-radius:11px;padding:14px 18px;margin:10px 0;font-size:15.5px;cursor:pointer;transition:.15s;color:var(--text)}
+  .opt:hover:not(:disabled){border-color:var(--gold);background:#FBF7EA}
+  .opt:disabled{cursor:default}
+  .opt.correct{background:#E7F2EA;border-color:var(--green);font-weight:bold}
+  .opt.wrong{background:#F8ECEC;border-color:#C86A6A}
+  .next{display:none;width:100%;margin-top:14px;padding:13px;border:none;border-radius:11px;
+    background:var(--green);color:#fff;font-size:15.5px;cursor:pointer;font-weight:bold}
+  .next.show{display:block}
+  .fin{display:none;text-align:center;padding:12px 0}
+  .fin .big{font-family:Georgia,serif;font-size:56px;color:var(--gold);line-height:1.1}
+  .fin .of{font-size:15px;color:var(--muted);margin:4px 0 14px}
+  .fin p{font-size:16px;margin-bottom:20px}
+  .fin button{padding:13px 30px;border:none;border-radius:11px;background:var(--green);color:#fff;
+    font-size:15.5px;font-weight:bold;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="quiz">
+  <div id="game">
+    <div class="top">
+      <h1>Тест · Отечественная война 1812 года</h1>
+      <span class="cnt" id="cnt">1 / 6</span>
+    </div>
+    <div class="bar"><i id="fill"></i></div>
+    <div class="qtext" id="qtext"></div>
+    <div id="opts"></div>
+    <button class="next" id="next">Следующий вопрос →</button>
+  </div>
+  <div class="fin" id="fin">
+    <div class="big" id="fscore"></div>
+    <div class="of">правильных ответов из 6</div>
+    <p id="ftext"></p>
+    <button onclick="start()">Пройти ещё раз</button>
+  </div>
+</div>
+
+<script>
+const Q = [
+  {q:"Когда «Великая армия» Наполеона перешла Неман — началась война?",
+   a:["4–6 августа 1812","12 (24) июня 1812","25 декабря 1812"],c:1},
+  {q:"Кто стал главнокомандующим русской армией 8 (20) августа 1812 года?",
+   a:["М. Б. Барклай-де-Толли","П. И. Багратион","М. И. Кутузов"],c:2},
+  {q:"Какого числа произошла Бородинская битва?",
+   a:["26 августа (7 сентября)","24 августа (5 сентября)","12 (24) июня"],c:0},
+  {q:"После какого сражения Наполеон повернул на разорённую Смоленскую дорогу?",
+   a:["Смоленское","Малоярославецкое","Битва на Березине"],c:1},
+  {q:"Кто руководил крестьянским отрядом в Сычёвском уезде?",
+   a:["Василиса Кожина","Герасим Курин","Денис Давыдов"],c:0},
+  {q:"Сколько солдат «Великой армии» вернулось из России?",
+   a:["около 300 тысяч","около 100 тысяч","30–50 тысяч"],c:2},
+];
+let idx = 0, score = 0;
+const $ = id => document.getElementById(id);
+
+function start(){
+  idx = 0; score = 0;
+  $("fin").style.display = "none";
+  $("game").style.display = "block";
+  show();
+}
+function show(){
+  const item = Q[idx];
+  $("cnt").textContent = (idx+1) + " / " + Q.length;
+  $("fill").style.width = (idx / Q.length * 100) + "%";
+  $("qtext").textContent = item.q;
+  $("next").classList.remove("show");
+  const box = $("opts");
+  box.innerHTML = "";
+  item.a.forEach((txt, ai) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.textContent = txt;
+    b.onclick = () => pick(b, ai, item.c);
+    box.appendChild(b);
+  });
+}
+function pick(btn, ai, correct){
+  const opts = [...document.querySelectorAll(".opt")];
+  if (opts.some(o => o.disabled)) return;
+  opts.forEach(o => o.disabled = true);
+  opts[correct].classList.add("correct");
+  if (ai === correct) score++;
+  else btn.classList.add("wrong");
+  $("fill").style.width = ((idx+1) / Q.length * 100) + "%";
+  $("next").textContent = idx === Q.length - 1 ? "Показать результат →" : "Следующий вопрос →";
+  $("next").classList.add("show");
+}
+$("next").onclick = () => {
+  idx++;
+  if (idx < Q.length) show(); else finish();
+};
+function finish(){
+  $("game").style.display = "none";
+  $("fin").style.display = "block";
+  $("fscore").textContent = score;
+  $("ftext").textContent =
+    score === 6 ? "Отлично! Ты знаешь войну 1812 года как настоящий историк." :
+    score >= 4  ? "Хороший результат! Ещё чуть-чуть — и будет идеально." :
+                  "Перечитай проект и попробуй ещё раз.";
+}
+start();
+</script>
+</body>
+</html>

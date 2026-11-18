@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отечественная война 1812 года — индивидуальный проект</title>
+<style>
+  :root{
+    --dark:#14291F; --dark2:#1C3628; --green:#2F5D46; --gold:#C9A227; --gold-soft:#E3CB7A;
+    --cream:#F4F1E8; --text:#1E2A24; --muted:#6F7D75; --card:#F4F6F4; --line:#DCE3DD;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',Calibri,Arial,sans-serif;color:var(--text);background:var(--cream);line-height:1.6}
+  h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 22px}
+
+  /* навигация */
+  nav{position:sticky;top:0;z-index:50;background:var(--dark);box-shadow:0 2px 10px rgba(0,0,0,.35)}
+  nav .wrap{display:flex;align-items:center;gap:18px;height:56px;flex-wrap:nowrap;overflow-x:auto}
+  nav .logo{color:var(--gold);font-family:Georgia,serif;font-weight:bold;white-space:nowrap;margin-right:8px}
+  nav a{color:#C7D4CB;text-decoration:none;font-size:14px;white-space:nowrap;padding:6px 10px;border-radius:6px}
+  nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+
+  /* шапка */
+  header{background:linear-gradient(160deg,#0F2019 0%,var(--dark) 45%,var(--dark2) 100%);
+    color:#fff;text-align:center;padding:90px 22px 100px}
+  header .school{color:#9FB2A6;font-size:14px;letter-spacing:1px;margin-bottom:46px}
+  header h1{font-size:clamp(34px,6vw,64px);line-height:1.12;font-weight:bold}
+  header h1 .gold{color:var(--gold)}
+  header .sub{margin-top:18px;color:#C7D4CB;font-size:clamp(15px,2.4vw,20px);letter-spacing:3px}
+  header .kicker{display:inline-block;margin-top:30px;padding:10px 26px;border:1px solid var(--gold);
+    color:var(--gold-soft);border-radius:30px;font-size:14px;letter-spacing:1px}
+  header .meta{margin-top:34px;color:#8FA398;font-size:13.5px}
+
+  /* секции */
+  section{padding:64px 0}
+  section:nth-of-type(even){background:#fff}
+  .kicker{display:inline-block;color:var(--gold);font-weight:bold;font-size:12.5px;
+    letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+  h2{font-size:clamp(26px,3.6vw,36px);color:var(--green);margin-bottom:26px}
+  .lead{font-size:17px;max-width:820px;margin-bottom:20px}
+
+  /* карточки */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:26px}
+  .card{background:var(--card);border-radius:12px;padding:22px;box-shadow:0 3px 14px rgba(20,41,31,.08)}
+  .card h3{color:var(--green);font-size:18px;margin-bottom:8px}
+  .card p{font-size:14.5px;color:var(--text)}
+  .card .year{color:var(--gold);font-weight:bold;font-family:Georgia,serif;font-size:15px;display:block;margin-bottom:6px}
+
+  /* числа */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:26px}
+  .stat{background:#fff;border-radius:12px;padding:26px;text-align:center;box-shadow:0 3px 14px rgba(20,41,31,.08)}
+  .stat b{display:block;font-family:Georgia,serif;font-size:38px;color:var(--green)}
+  .stat span{font-size:14px;color:var(--muted)}
+
+  /* сравнение сил */
+  .bar-row{margin:14px 0}
+  .bar-row .lbl{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:6px}
+  .bar{height:30px;border-radius:6px;background:#E8ECE9;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:6px;animation:grow 1.1s ease}
+  .bar .fr{width:100%;background:#3B4A42}
+  .bar .ru{width:82%;background:var(--gold)}
+  @keyframes grow{from{width:0}}
+  .note{font-size:13px;color:var(--muted);margin-top:10px}
+
+  /* таймлайн */
+  .tl{position:relative;margin-top:30px;padding-left:26px;border-left:3px solid var(--line)}
+  .tl-item{position:relative;padding:0 0 28px 26px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-37px;top:6px;width:15px;height:15px;border-radius:50%;
+    background:var(--gold);border:3px solid #fff;box-shadow:0 0 0 2px var(--gold)}
+  .tl-item .date{font-family:Georgia,serif;font-weight:bold;color:var(--green);font-size:17px}
+  .tl-item p{font-size:15px;margin-top:3px}
+
+  .quote{margin:34px auto 0;max-width:760px;text-align:center;font-family:Georgia,serif;
+    font-size:24px;color:var(--green);font-style:italic}
+  .quote small{display:block;margin-top:8px;font-family:'Segoe UI',Calibri,sans-serif;font-size:13.5px;
+    color:var(--muted);font-style:normal}
+
+  /* гипотеза */
+  .hypo{background:var(--dark);color:#EAF0EB;border-radius:14px;padding:34px;margin-top:26px}
+  .hypo .kicker{color:var(--gold)}
+  .hypo p{font-size:18px;font-style:italic}
+  .factors{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:30px}
+  .factor{background:#fff;border-radius:12px;padding:20px;box-shadow:0 3px 14px rgba(20,41,31,.08)}
+  .factor b{color:var(--green)}
+  .factor p{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+  /* викторина */
+  .quiz{background:#fff;border-radius:14px;padding:30px;box-shadow:0 4px 18px rgba(20,41,31,.1);margin-top:26px}
+  .q{margin-bottom:26px}
+  .q h3{font-size:16.5px;margin-bottom:10px;font-family:'Segoe UI',Calibri,sans-serif}
+  .q .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);
+    border-radius:9px;padding:11px 16px;margin:7px 0;font-size:14.5px;cursor:pointer;transition:.15s;color:var(--text)}
+  .q .opt:hover{border-color:var(--gold)}
+  .q .opt.correct{background:#E7F2EA;border-color:var(--green);font-weight:bold}
+  .q .opt.wrong{background:#F8ECEC;border-color:#C86A6A}
+  .q .opt:disabled{cursor:default}
+  .result{display:none;text-align:center;background:var(--dark);color:#fff;border-radius:12px;padding:26px;margin-top:10px}
+  .result b{font-family:Georgia,serif;font-size:34px;color:var(--gold)}
+  .result p{color:#C7D4CB;margin-top:6px}
+  .quiz-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  #score{font-weight:bold;color:var(--green)}
+
+  /* источники */
+  ol.src{margin-top:16px;padding-left:22px}
+  ol.src li{font-size:14.5px;margin-bottom:8px}
+  footer{background:var(--dark);color:#9FB2A6;text-align:center;padding:36px 22px;font-size:13.5px}
+  footer b{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="logo">1812</span>
+    <a href="#about">О проекте</a>
+    <a href="#reasons">Причины</a>
+    <a href="#forces">Силы</a>
+    <a href="#timeline">Ход войны</a>
+    <a href="#borodino">Бородино</a>
+    <a href="#people">Народная война</a>
+    <a href="#results">Итоги</a>
+    <a href="#quiz">Викторина</a>
+    <a href="#sources">Источники</a>
+  </div>
+</nav>
+
+<header>
+  <div class="school">БОУ г. Омска «Средняя общеобразовательная школа № 93» · Индивидуальный проект</div>
+  <h1>Отечественная война<br><span class="gold">1812 года</span></h1>
+  <div class="sub">ПРИЧИНЫ · ХОД · ИТОГИ</div>
+  <div class="kicker">12 июня 1812 — 14 декабря 1812</div>
+  <div class="meta">Выполнил: ученик ____ класса · Руководитель: учитель истории</div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <span class="kicker">О проекте</span>
+    <h2>Почему эта тема важна</h2>
+    <p class="lead">Отечественная война 1812 года — образец единства народа перед внешней угрозой
+    и одно из главных событий национальной истории. Разгром «Великой армии» Наполеона изменил
+    карту Европы и оставил глубокий след в культуре: «Война и мир» Толстого, «Бородино» Лермонтова,
+    панорама Рубо.</p>
+    <div class="grid">
+      <div class="card"><span class="year">Проблема</span><p>Причины, события и итоги войны изучаются отрывочно — трудно увидеть войну целиком.</p></div>
+      <div class="card"><span class="year">Методы</span><p>Поиск и анализ литературы, сравнительный анализ, систематизация в таблицы.</p></div>
+      <div class="card"><span class="year">Продукт</span><p>Письменная работа и справочные таблицы: хронология, силы сторон, основные сражения.</p></div>
+      <div class="card"><span class="year">Память</span><p>7 сентября — День воинской славы России: день начала Бородинской битвы.</p></div>
+    </div>
+    <div class="hypo">
+      <span class="kicker">Гипотеза</span>
+      <p>«Война стала закономерным следствием противоречий России и наполеоновской Франции,
+      а её победный исход определили не только полководческое искусство русского командования,
+      но и народный характер войны».</p>
+    </div>
+  </div>
+</section>
+
+<section id="reasons">
+  <div class="wrap">
+    <span class="kicker">Глава 1</span>
+    <h2>Причины войны</h2>
+    <p class="lead">К 1811 году противоречия двух империй достигли предела — война стала делом времени.</p>
+    <div class="grid">
+      <div class="card"><span class="year">1807 · Тильзит</span><h3>Неравноправный союз</h3><p>После поражений 1805–1807 годов Александр I подписал мир и союз с Наполеоном: признание его завоеваний и присоединение к блокаде Англии.</p></div>
+      <div class="card"><span class="year">1807–1810</span><h3>Континентальная блокада</h3><p>Запрет торговли с Англией обрушил цены на экспорт — пеньку, лён, зерно. Удар по дворянству и казне. В 1810 году Россия ввела льготный тариф — Наполеон расценил это как нарушение союза.</p></div>
+      <div class="card"><span class="year">Польша</span><h3>Польский вопрос</h3><p>Герцогство Варшавское, созданное Наполеоном, — намёк на «восстановление Польши в исторических границах», прямая угроза западным губерниям России.</p></div>
+      <div class="card"><span class="year">1810 · Германия</span><h3>Ольденбург и династия</h3><p>Франция присоединила герцогство Ольденбургское — владения родни царя. Плюс отказ выдать за Наполеона сестру Александра I и его брак с австрийской эрцгерцогиней.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="forces">
+  <div class="wrap">
+    <span class="kicker">Глава 1</span>
+    <h2>Силы сторон накануне вторжения</h2>
+    <div class="bar-row"><div class="lbl"><span>«Великая армия» Наполеона</span><b>≈ 610 тыс. чел.</b></div>
+      <div class="bar"><i class="fr"></i></div></div>
+    <div class="bar-row"><div class="lbl"><span>Русские войска на западных границах</span><b>≈ 500 тыс. чел.</b></div>
+      <div class="bar"><i class="ru"></i></div></div>
+    <p class="note">Оценки историков (учебник Арсентьева и др.; П. А. Жилин). В первом эшелоне вторжения — около 450 тыс.; половина армии Наполеона — войска покорённых стран.</p>
+    <div class="stats">
+      <div class="stat"><b>≈450</b><span>тыс. — первый эшелон Наполеона</span></div>
+      <div class="stat"><b>1200</b><span>орудий — у каждой стороны</span></div>
+      <div class="stat"><b>127+49+45</b><span>тыс. — три русские армии: Барклая, Багратиона, Тормасова</span></div>
+      <div class="stat"><b>900</b><span>тыс. — россиян с резервами и ополчениями за войну</span></div>
+    </div>
+    <p class="lead" style="margin-top:26px">План Наполеона — разбить русские армии поодиночке за одну кампанию.
+    План России — <b>сохранить армию</b>: отступать, соединиться, дать бой на выбранной земле.</p>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <span class="kicker">Глава 2</span>
+    <h2>Ход войны: главные события</h2>
+    <div class="tl">
+      <div class="tl-item"><span class="date">12 (24) июня 1812</span><p>«Великая армия» переходит Неман — вторжение без объявления войны. Начинается отступление русских армий с упорными боями у Мира, Романова, Салтановки.</p></div>
+      <div class="tl-item"><span class="date">4–6 (16–18) августа</span><p>Смоленское сражение: армии Барклая и Багратиона соединились и отошли с малыми потерями. План Наполеона разбить их поодиночке сорван.</p></div>
+      <div class="tl-item"><span class="date">8 (20) августа</span><p>Главнокомандующим назначен М. И. Кутузов: «пришёл — ругаться, да уехал — спасать».</p></div>
+      <div class="tl-item"><span class="date">24–26 августа (5–7 сентября)</span><p>Шевардино и Бородино — крупнейшее сражение эпохи. Армия не разбита — моральная победа России.</p></div>
+      <div class="tl-item"><span class="date">1 (13) сентября</span><p>Совет в Филях: «С потерею Москвы не потеряна ещё Россия». Армия оставляет Москву, совершая Тарутинский манёвр.</p></div>
+      <div class="tl-item"><span class="date">2 (14) сентября — 7 (19) октября</span><p>Наполеон в опустевшей горящей Москве: ни мира, ни депутации. Тарутино прикрывает Тулу и Калугу. Наполеон уходит на юг — и поворачивает назад.</p></div>
+      <div class="tl-item"><span class="date">12 (24) октября</span><p>Малоярославец: город 8 раз переходил из рук в руки. Наполеон повернул на разорённую Смоленскую дорогу — перелом кампании.</p></div>
+      <div class="tl-item"><span class="date">3–6 (15–18) ноября</span><p>Сражение у Красного: тяжелейшие потери отступающих французов.</p></div>
+      <div class="tl-item"><span class="date">14–16 (26–28) ноября</span><p>Битва на Березине: спасся лишь костяк «Великой армии» с Наполеоном.</p></div>
+      <div class="tl-item"><span class="date">14 (26) декабря 1812</span><p>Последний французский солдат покинул пределы России. Манифест 25 декабря — война закончилась победой.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="borodino">
+  <div class="wrap">
+    <span class="kicker">Глава 2 · 26 августа (7 сентября)</span>
+    <h2>Бородинская битва</h2>
+    <p class="lead">Крупнейшее сражение эпохи наполеоновских войн — у села Бородино, в 125 км от Москвы.
+    Главные удары французов — Багратионовы флеши и батарея Раевского; флеши отбивали <b>семь раз</b>.
+    П. И. Багратион был смертельно ранен, А. А. Тучков погиб с полком на Утицком кургане.</p>
+    <div class="stats">
+      <div class="stat"><b>~300 тыс.</b><span>человек — обе армии</span></div>
+      <div class="stat"><b>1200+</b><span>орудий</span></div>
+      <div class="stat"><b>~75 тыс.</b><span>потери обеих сторон за день</span></div>
+      <div class="stat"><b>0</b><span>больших сражений выиграл Наполеон в России после Бородина</span></div>
+    </div>
+    <div class="quote">«С потерею Москвы не потеряна ещё Россия… но при колебании и потере армии не потеряна Россия»<small>— М. И. Кутузов, совет в Филях, 1 (13) сентября 1812 года</small></div>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <span class="kicker">Глава 2</span>
+    <h2>Народная война</h2>
+    <p class="lead">С уходом французов из Москвы война стала всенародной: армейские партизаны и крестьянские
+    отряды лишили «Великую армию» снабжения с мест.</p>
+    <div class="grid">
+      <div class="card"><h3>Армейские партизаны</h3><p><b>Д. В. Давыдов</b> — инициатор конных партий;<br><b>А. Н. Сеславин</b> — разведка маршрутов Наполеона;<br><b>А. С. Фигнер</b> — рейды в тыл;<br><b>И. С. Дорохов</b> — освобождал города к западу от Москвы.</p></div>
+      <div class="card"><h3>Крестьянские отряды</h3><p><b>Герасим Курин</b> (Богородск) — до 5,5 тыс. бойцов;<br><b>Василиса Кожина</b> (Сычёвский уезд) — вожак крестьян;<br>сёла жгли запасы и уходили в леса.</p></div>
+    </div>
+    <div class="quote">«Клуб народной войны»<small>— так Е. В. Тарле называл всенародную борьбу; она и дала войне имя Отечественной</small></div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <span class="kicker">Глава 3</span>
+    <h2>Итоги войны</h2>
+    <div class="stats">
+      <div class="stat"><b>30–50 тыс.</b><span>из 610 тыс. «Великой армии» вернулось из России</span></div>
+      <div class="stat"><b>1814</b><span>вход союзников в Париж, отречение Наполеона</span></div>
+      <div class="stat"><b>&gt;1 млрд</b><span>рублей — ущерб западным губерниям России</span></div>
+      <div class="stat"><b>1815</b><span>Венский конгресс и Священный союз; Россия — гарант Европы</span></div>
+    </div>
+    <p class="lead" style="margin-top:26px">Война ускорила рост национального самосознания: из фронтовых офицеров выросли будущие декабристы,
+    а события 1812 года вошли в основу русской культуры — от «Бородино» Лермонтова до «Войны и мира» Толстого.</p>
+    <div class="hypo">
+      <span class="kicker">Вывод · гипотеза подтверждена</span>
+      <p>Победу определили четыре фактора: стратегия сохранения армии (отступление — Бородино — Тарутино — контрнаступление),
+      пространство России, народный характер войны и просчёты самого Наполеона.</p>
+      <div class="factors">
+        <div class="factor"><b>Стратегия</b><p>сохранить армию и выбрать момент для контрнаступления</p></div>
+        <div class="factor"><b>Пространство</b><p>глубокое вторжение истощило «Великую армию»</p></div>
+        <div class="factor"><b>Народ</b><p>ополчения, партизаны, стойкость войск</p></div>
+        <div class="factor"><b>Ошибки врага</b><p>переоценка сил, затяжка в Москве</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="wrap">
+    <span class="kicker">Интерактив</span>
+    <h2>Викторина: проверь себя</h2>
+    <div class="quiz">
+      <div class="quiz-top"><b id="score">Счёт: 0 из 6</b><span style="font-size:13.5px;color:var(--muted)">Нажимай на ответ — сразу увидишь результат</span></div>
+      <div id="quiz-body"></div>
+      <div class="result" id="result"><b id="res-score"></b><p id="res-text"></p></div>
+      <button id="restart" onclick="location.reload()" style="display:none;margin-top:14px;padding:11px 26px;border:none;border-radius:9px;background:var(--green);color:#fff;font-size:15px;cursor:pointer">Пройти ещё раз</button>
+    </div>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <span class="kicker">Литература</span>
+    <h2>Источники</h2>
+    <ol class="src">
+      <li>Толстой Л. Н. Война и мир: роман : в 4 кн. — М.: Эксмо, 2017.</li>
+      <li>Арсентьев Н. М., Данилов А. А., Левандовский А. А. История России. 9 класс. Ч. 1. — М.: Просвещение, 2019.</li>
+      <li>Безотосный В. М. Россия в наполеоновских войнах 1805–1815 годов. — М.: Вече, 2016.</li>
+      <li>Богданович М. И. История Отечественной войны 1812 года по достоверным источникам. — СПб., 1859.</li>
+      <li>Жилин П. А. Гибель наполеоновской армии в России. — М.: Воениздат, 1974.</li>
+      <li>Тарле Е. В. Наполеон. — М.: АСТ, 2020.</li>
+      <li>Родина: российский исторический журнал. — 2012. — № 8. «Гроза двенадцатого года».</li>
+      <li>Бородинский музей-заповедник: borodino.ru · Президентская библиотека: prlib.ru · Культура.РФ</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <b>Отечественная война 1812 года</b> · индивидуальный проект · БОУ г. Омска «СОШ № 93» · Омск, 2026
+</footer>
+
+<script>
+const QUESTIONS = [
+  {q:"Когда «Великая армия» перешла Неман — началась война?",
+   a:["12 (24) июня 1812","25 декабря 1812","4–6 августа 1812"],c:0},
+  {q:"Кто стал главнокомандующим 8 (20) августа 1812 года?",
+   a:["М. Б. Барклай-де-Толли","М. И. Кутузов","П. И. Багратион"],c:1},
+  {q:"Какого числа произошла Бородинская битва?",
+   a:["26 августа (7 сентября)","12 (24) июня","14–16 (26–28) ноября"],c:0},
+  {q:"После какого сражения Наполеон повернул на разорённую Смоленскую дорогу?",
+   a:["Смоленское","Малоярославецкое","Битва на Березине"],c:1},
+  {q:"Кто руководил крестьянским отрядом в Сычёвском уезде?",
+   a:["Герасим Курин","Василиса Кожина","Денис Давыдов"],c:1},
+  {q:"Сколько солдат «Великой армии» вернулось из России?",
+   a:["около 300 тысяч","около 100 тысяч","30–50 тысяч"],c:2},
+];
+let score = 0, answered = 0;
+const body = document.getElementById("quiz-body");
+
+function render(){
+  body.innerHTML = "";
+  score = 0; answered = 0;
+  document.getElementById("score").textContent = "Счёт: 0 из " + QUESTIONS.length;
+  document.getElementById("result").style.display = "none";
+  document.getElementById("restart").style.display = "none";
+  QUESTIONS.forEach((item, qi) => {
+    const q = document.createElement("div"); q.className = "q";
+    q.innerHTML = "<h3>" + (qi+1) + ". " + item.q + "</h3>";
+    item.a.forEach((txt, ai) => {
+      const b = document.createElement("button");
+      b.className = "opt"; b.textContent = txt;
+      b.onclick = () => answer(q, b, ai, item.c);
+      q.appendChild(b);
+    });
+    body.appendChild(q);
+  });
+}
+function answer(q, btn, ai, correct){
+  const opts = q.querySelectorAll(".opt");
+  if ([...opts].some(o => o.disabled)) return;
+  opts.forEach(o => o.disabled = true);
+  opts[correct].classList.add("correct");
+  if (ai === correct) score++; else btn.classList.add("wrong");
+  answered++;
+  document.getElementById("score").textContent = "Счёт: " + score + " из " + QUESTIONS.length;
+  if (answered === QUESTIONS.length) finish();
+}
+function finish(){
+  const r = document.getElementById("result");
+  document.getElementById("res-score").textContent = score + " из " + QUESTIONS.length;
+  const t = score === 6 ? "Отлично! Ты знаешь войну 1812 года как настоящий историк." :
+            score >= 4 ? "Хороший результат! Перечитай хронологию — и будет отлично." :
+            "Перечитай разделы проекта и попробуй ещё раз.";
+  document.getElementById("res-text").textContent = t;
+  r.style.display = "block";
+  document.getElementById("restart").style.display = "inline-block";
+}
+render();
+</script>
+</body>
+</html>
