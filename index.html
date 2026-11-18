@@ -34,6 +34,21 @@
   .fin p{font-size:16px;margin-bottom:20px}
   .fin button{padding:13px 30px;border:none;border-radius:11px;background:var(--green);color:#fff;
     font-size:15.5px;font-weight:bold;cursor:pointer}
+  .sv{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}
+  .sv-h{font-family:Georgia,serif;font-size:16.5px;color:var(--green);margin-bottom:4px}
+  .sv-hint{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+  .sv-q{font-size:14.5px;font-weight:bold;margin:14px 0 7px}
+  .sv-opts{display:flex;flex-wrap:wrap;gap:7px}
+  .sv-b{background:var(--card);border:1.5px solid var(--line);border-radius:9px;padding:9px 13px;
+    font-size:13.5px;cursor:pointer;transition:.15s;color:var(--text)}
+  .sv-b:hover{border-color:var(--gold)}
+  .sv-b.sel{background:#FBF3DD;border-color:var(--gold);font-weight:bold}
+  #send{display:none;width:100%;margin-top:18px;padding:13px;border:none;border-radius:11px;
+    background:var(--gold);color:#2A2104;font-size:15.5px;font-weight:bold;cursor:pointer}
+  #send.show{display:block}
+  #sv-status{display:none;margin-top:12px;text-align:center;font-size:14px;padding:10px;border-radius:9px}
+  #sv-status.ok{display:block;background:#E7F2EA;color:var(--green)}
+  #sv-status.err{display:block;background:#F8ECEC;color:#8A3B3B}
 </style>
 </head>
 <body>
@@ -53,6 +68,34 @@
     <div class="of">правильных ответов из 6</div>
     <p id="ftext"></p>
     <button onclick="start()">Пройти ещё раз</button>
+    <div class="sv" id="survey">
+      <div class="sv-h">Твоя обратная связь — часть исследования</div>
+      <div class="sv-hint">Ответь на 3 коротких вопроса (анонимно) и отправь результат автору проекта.</div>
+      <div class="sv-q">1. Насколько тебе интересна война 1812 года?</div>
+      <div class="sv-opts" data-q="interest">
+        <button class="sv-b">Очень интересно</button>
+        <button class="sv-b">Интересно</button>
+        <button class="sv-b">Не очень интересно</button>
+        <button class="sv-b">Совсем не интересно</button>
+      </div>
+      <div class="sv-q">2. Сколько ты знал(а) о войне до этого теста?</div>
+      <div class="sv-opts" data-q="selfKnow">
+        <button class="sv-b">Знал(а) много</button>
+        <button class="sv-b">Знал(а) основное</button>
+        <button class="sv-b">Мало что знал(а)</button>
+        <button class="sv-b">Почти ничего</button>
+      </div>
+      <div class="sv-q">3. О чём хотел(а) бы узнать подробнее?</div>
+      <div class="sv-opts" data-q="wantMore">
+        <button class="sv-b">О причинах войны</button>
+        <button class="sv-b">О сражениях</button>
+        <button class="sv-b">О героях и партизанах</button>
+        <button class="sv-b">Об итогах и значении</button>
+        <button class="sv-b">Ни о чём</button>
+      </div>
+      <button id="send" onclick="sendResult()">Отправить результаты</button>
+      <div id="sv-status"></div>
+    </div>
   </div>
 </div>
 
@@ -73,11 +116,17 @@ const Q = [
 ];
 let idx = 0, score = 0;
 const $ = id => document.getElementById(id);
+const KVDB = "https://kvdb.io/4ujZ7QkyfPAV1TSeeoQnpQ/";
+const svSel = { interest: "", selfKnow: "", wantMore: "" };
 
 function start(){
   idx = 0; score = 0;
   $("fin").style.display = "none";
   $("game").style.display = "block";
+  svSel.interest = ""; svSel.selfKnow = ""; svSel.wantMore = "";
+  document.querySelectorAll(".sv-b").forEach(b => { b.classList.remove("sel"); b.disabled = false; });
+  const st = $("sv-status"); st.className = ""; st.style.display = "none";
+  $("send").classList.remove("show"); $("send").style.display = "";
   show();
 }
 function show(){
@@ -118,6 +167,35 @@ function finish(){
     score === 6 ? "Отлично! Ты знаешь войну 1812 года как настоящий историк." :
     score >= 4  ? "Хороший результат! Ещё чуть-чуть — и будет идеально." :
                   "Перечитай проект и попробуй ещё раз.";
+}
+
+// опрос и отправка результата в kvdb.io
+document.querySelectorAll(".sv-opts").forEach(g => {
+  g.querySelectorAll(".sv-b").forEach(b => {
+    b.onclick = () => {
+      g.querySelectorAll(".sv-b").forEach(o => o.classList.remove("sel"));
+      b.classList.add("sel");
+      svSel[g.dataset.q] = b.textContent;
+      if (svSel.interest && svSel.selfKnow && svSel.wantMore) $("send").classList.add("show");
+    };
+  });
+});
+async function sendResult(){
+  const st = $("sv-status");
+  st.style.display = "block"; st.textContent = "Отправляю…";
+  const rec = { ts: new Date().toISOString(), score,
+    interest: svSel.interest, selfKnow: svSel.selfKnow, wantMore: svSel.wantMore };
+  try {
+    const r = await fetch(KVDB + "r-" + Date.now() + "-" + Math.floor(Math.random() * 1e6),
+      { method: "PUT", body: JSON.stringify(rec) });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    st.className = "ok"; st.textContent = "Результаты сохранены — спасибо! Автор проекта увидит твой результат.";
+    $("send").style.display = "none";
+    document.querySelectorAll(".sv-b").forEach(b => b.disabled = true);
+  } catch (e) {
+    st.className = "err"; st.textContent = "Не удалось сохранить (нет соединения). Нажми «Отправить» ещё раз.";
+    $("send").classList.add("show");
+  }
 }
 start();
 </script>
