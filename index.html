@@ -116,10 +116,7 @@ const Q = [
 ];
 let idx = 0, score = 0;
 const $ = id => document.getElementById(id);
-const GH_TOKEN = "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";
-const GIST_ID = "477d3b70fdc95957a76a8ab13030a415";
-const GH_API = "https://api.github.com/gists/" + GIST_ID;
-const GH_HEADERS = { Authorization: "Bearer " + GH_TOKEN, Accept: "application/vnd.github+json" };
+const KVDB = "https://kvdb.io/fkdRx7m3jHDC2QUsGCvfd/";
 const svSel = { interest: "", selfKnow: "", wantMore: "" };
 
 function start(){
@@ -172,7 +169,7 @@ function finish(){
                   "Перечитай проект и попробуй ещё раз.";
 }
 
-// опрос и отправка результата в gist (мониторинг автора)
+// опрос и отправка результата в kvdb.io
 document.querySelectorAll(".sv-opts").forEach(g => {
   g.querySelectorAll(".sv-b").forEach(b => {
     b.onclick = () => {
@@ -189,17 +186,9 @@ async function sendResult(){
   const rec = { ts: new Date().toISOString(), score,
     interest: svSel.interest, selfKnow: svSel.selfKnow, wantMore: svSel.wantMore };
   try {
-    const r0 = await fetch(GH_API, { headers: GH_HEADERS });
-    if (!r0.ok) throw new Error("read " + r0.status);
-    const g = await r0.json();
-    const list = JSON.parse(g.files["results.json"].content || "[]");
-    list.push(rec);
-    while (list.length > 300) list.shift();
-    const r1 = await fetch(GH_API, {
-      method: "PATCH",
-      headers: { ...GH_HEADERS, "Content-Type": "application/json" },
-      body: JSON.stringify({ files: { "results.json": { content: JSON.stringify(list) } } }) });
-    if (!r1.ok) throw new Error("save " + r1.status);
+    const r = await fetch(KVDB + "r-" + Date.now() + "-" + Math.floor(Math.random() * 1e6),
+      { method: "PUT", body: JSON.stringify(rec) });
+    if (!r.ok) throw new Error("HTTP " + r.status);
     st.className = "ok"; st.textContent = "Результаты сохранены — спасибо! Автор проекта увидит твой результат.";
     $("send").style.display = "none";
     document.querySelectorAll(".sv-b").forEach(b => b.disabled = true);
