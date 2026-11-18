@@ -64,6 +64,15 @@
   @keyframes grow{from{width:0}}
   .note{font-size:13px;color:var(--muted);margin-top:10px}
 
+  /* карта похода */
+  figure.map{margin:34px 0 10px;background:var(--card);border-radius:14px;padding:18px;
+    box-shadow:0 3px 14px rgba(20,41,31,.08)}
+  figure.map svg{width:100%;height:auto;display:block}
+  figure.map figcaption{font-size:13.5px;color:var(--muted);text-align:center;margin-top:10px}
+  .map .city{font-family:'Segoe UI',Calibri,sans-serif;font-size:15px;fill:var(--text);font-weight:600}
+  .map .dt{font-family:'Segoe UI',Calibri,sans-serif;font-size:12.5px;fill:var(--muted)}
+  .map .leg{font-family:'Segoe UI',Calibri,sans-serif;font-size:14px;fill:var(--text)}
+
   /* таймлайн */
   .tl{position:relative;margin-top:30px;padding-left:26px;border-left:3px solid var(--line)}
   .tl-item{position:relative;padding:0 0 28px 26px}
@@ -196,6 +205,64 @@
   <div class="wrap">
     <span class="kicker">Глава 2</span>
     <h2>Ход войны: главные события</h2>
+    <figure class="map">
+      <svg viewBox="0 0 920 560" role="img" aria-label="Карта похода Наполеона в Россию 1812 года">
+        <rect x="0" y="0" width="920" height="560" rx="14" fill="#EDF1EE"/>
+        <!-- реки -->
+        <path d="M55,480 C110,445 85,420 55,390 C90,395 120,420 95,455" fill="none" stroke="#AFC3D4" stroke-width="9" stroke-linecap="round"/>
+        <path d="M310,395 C270,370 255,350 262,325 C285,340 295,365 278,382" fill="none" stroke="#AFC3D4" stroke-width="9" stroke-linecap="round"/>
+        <path d="M700,120 C660,160 700,200 740,180 C780,160 760,110 720,95" fill="none" stroke="#C7D5DE" stroke-width="7" stroke-linecap="round"/>
+        <text x="708" y="215" class="dt">Волга</text>
+        <!-- маршрут наступления (золотой) -->
+        <polyline points="80,400 230,250 330,255 450,265 540,285 660,300" fill="none"
+          stroke="#C9A227" stroke-width="5.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <path d="M660,300 l-16,-9 l3,10 l-9,5 z" fill="#C9A227"/>
+        <!-- маршрут отступления (красный пунктир) -->
+        <polyline points="660,300 620,400 450,265 370,295 250,330 95,412" fill="none"
+          stroke="#B5533C" stroke-width="5" stroke-dasharray="12 9" stroke-linejoin="round" stroke-linecap="round"/>
+        <!-- города: точка + название + дата -->
+        <g>
+          <circle cx="80" cy="400" r="8" fill="#2F5D46"/><circle cx="80" cy="400" r="3.5" fill="#fff"/>
+          <text x="98" y="388" class="city">Ковно · Неман</text><text x="98" y="406" class="dt">12 (24) июня 1812 — вторжение</text>
+
+          <circle cx="230" cy="250" r="7" fill="#2F5D46"/>
+          <text x="216" y="228" class="city">Витебск</text>
+
+          <circle cx="330" cy="255" r="8" fill="#2F5D46"/><circle cx="330" cy="255" r="3.5" fill="#fff"/>
+          <text x="318" y="234" class="city">Смоленск</text><text x="318" y="283" class="dt">4–6 (16–18) августа</text>
+
+          <circle cx="450" cy="265" r="5.5" fill="#2F5D46"/>
+          <text x="440" y="246" class="city">Вязьма</text>
+
+          <circle cx="540" cy="285" r="9" fill="#B5533C"/>
+          <text x="526" y="264" class="city">Бородино</text><text x="526" y="312" class="dt">26 августа (7 сентября)</text>
+
+          <circle cx="660" cy="300" r="10" fill="#B5533C"/>
+          <text x="676" y="292" class="city">Москва</text><text x="676" y="311" class="dt">2 (14) сентября — 7 (19) октября</text>
+
+          <circle cx="620" cy="400" r="8" fill="#2F5D46"/>
+          <text x="636" y="396" class="city">Малоярославец</text><text x="636" y="414" class="dt">12 (24) октября — перелом</text>
+
+          <circle cx="370" cy="295" r="7" fill="#2F5D46"/>
+          <text x="330" y="330" class="city">Красный</text><text x="330" y="347" class="dt">3–6 (15–18) ноября</text>
+
+          <circle cx="250" cy="330" r="8" fill="#B5533C"/>
+          <text x="196" y="308" class="city">р. Березина</text><text x="150" y="360" class="dt">14–16 (26–28) ноября</text>
+
+          <circle cx="95" cy="412" r="8" fill="#B5533C"/>
+          <text x="60" y="448" class="city">Изгнание</text><text x="40" y="466" class="dt">14 (26) декабря 1812</text>
+        </g>
+        <!-- легенда -->
+        <g>
+          <rect x="60" y="40" width="330" height="74" rx="10" fill="#FFFFFF" opacity="0.85"/>
+          <line x1="80" y1="64" x2="130" y2="64" stroke="#C9A227" stroke-width="5"/>
+          <text x="142" y="69" class="leg">наступление Наполеона</text>
+          <line x1="80" y1="92" x2="130" y2="92" stroke="#B5533C" stroke-width="5" stroke-dasharray="11 8"/>
+          <text x="142" y="97" class="leg">отступление и гибель армии</text>
+        </g>
+      </svg>
+      <figcaption>Схематичная карта похода «Великой армии» в Россию (расстояния не в масштабе). Составлено автором проекта по материалам учебника и исторических трудов.</figcaption>
+    </figure>
     <div class="tl">
       <div class="tl-item"><span class="date">12 (24) июня 1812</span><p>«Великая армия» переходит Неман — вторжение без объявления войны. Начинается отступление русских армий с упорными боями у Мира, Романова, Салтановки.</p></div>
       <div class="tl-item"><span class="date">4–6 (16–18) августа</span><p>Смоленское сражение: армии Барклая и Багратиона соединились и отошли с малыми потерями. План Наполеона разбить их поодиночке сорван.</p></div>
