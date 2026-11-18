@@ -96,22 +96,6 @@
   .factor b{color:var(--green)}
   .factor p{font-size:13.5px;color:var(--muted);margin-top:4px}
 
-  /* викторина */
-  .quiz{background:#fff;border-radius:14px;padding:30px;box-shadow:0 4px 18px rgba(20,41,31,.1);margin-top:26px}
-  .q{margin-bottom:26px}
-  .q h3{font-size:16.5px;margin-bottom:10px;font-family:'Segoe UI',Calibri,sans-serif}
-  .q .opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);
-    border-radius:9px;padding:11px 16px;margin:7px 0;font-size:14.5px;cursor:pointer;transition:.15s;color:var(--text)}
-  .q .opt:hover{border-color:var(--gold)}
-  .q .opt.correct{background:#E7F2EA;border-color:var(--green);font-weight:bold}
-  .q .opt.wrong{background:#F8ECEC;border-color:#C86A6A}
-  .q .opt:disabled{cursor:default}
-  .result{display:none;text-align:center;background:var(--dark);color:#fff;border-radius:12px;padding:26px;margin-top:10px}
-  .result b{font-family:Georgia,serif;font-size:34px;color:var(--gold)}
-  .result p{color:#C7D4CB;margin-top:6px}
-  .quiz-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-  #score{font-weight:bold;color:var(--green)}
-
   /* источники */
   ol.src{margin-top:16px;padding-left:22px}
   ol.src li{font-size:14.5px;margin-bottom:8px}
@@ -131,7 +115,6 @@
     <a href="#borodino">Бородино</a>
     <a href="#people">Народная война</a>
     <a href="#results">Итоги</a>
-    <a href="#quiz">Викторина</a>
     <a href="#sources">Источники</a>
   </div>
 </nav>
@@ -335,19 +318,6 @@
   </div>
 </section>
 
-<section id="quiz">
-  <div class="wrap">
-    <span class="kicker">Интерактив</span>
-    <h2>Викторина: проверь себя</h2>
-    <div class="quiz">
-      <div class="quiz-top"><b id="score">Счёт: 0 из 6</b><span style="font-size:13.5px;color:var(--muted)">Нажимай на ответ — сразу увидишь результат</span></div>
-      <div id="quiz-body"></div>
-      <div class="result" id="result"><b id="res-score"></b><p id="res-text"></p></div>
-      <button id="restart" onclick="location.reload()" style="display:none;margin-top:14px;padding:11px 26px;border:none;border-radius:9px;background:var(--green);color:#fff;font-size:15px;cursor:pointer">Пройти ещё раз</button>
-    </div>
-  </div>
-</section>
-
 <section id="sources">
   <div class="wrap">
     <span class="kicker">Литература</span>
@@ -369,63 +339,5 @@
   <b>Отечественная война 1812 года</b> · индивидуальный проект · БОУ г. Омска «СОШ № 93» · Омск, 2026
 </footer>
 
-<script>
-const QUESTIONS = [
-  {q:"Когда «Великая армия» перешла Неман — началась война?",
-   a:["12 (24) июня 1812","25 декабря 1812","4–6 августа 1812"],c:0},
-  {q:"Кто стал главнокомандующим 8 (20) августа 1812 года?",
-   a:["М. Б. Барклай-де-Толли","М. И. Кутузов","П. И. Багратион"],c:1},
-  {q:"Какого числа произошла Бородинская битва?",
-   a:["26 августа (7 сентября)","12 (24) июня","14–16 (26–28) ноября"],c:0},
-  {q:"После какого сражения Наполеон повернул на разорённую Смоленскую дорогу?",
-   a:["Смоленское","Малоярославецкое","Битва на Березине"],c:1},
-  {q:"Кто руководил крестьянским отрядом в Сычёвском уезде?",
-   a:["Герасим Курин","Василиса Кожина","Денис Давыдов"],c:1},
-  {q:"Сколько солдат «Великой армии» вернулось из России?",
-   a:["около 300 тысяч","около 100 тысяч","30–50 тысяч"],c:2},
-];
-let score = 0, answered = 0;
-const body = document.getElementById("quiz-body");
-
-function render(){
-  body.innerHTML = "";
-  score = 0; answered = 0;
-  document.getElementById("score").textContent = "Счёт: 0 из " + QUESTIONS.length;
-  document.getElementById("result").style.display = "none";
-  document.getElementById("restart").style.display = "none";
-  QUESTIONS.forEach((item, qi) => {
-    const q = document.createElement("div"); q.className = "q";
-    q.innerHTML = "<h3>" + (qi+1) + ". " + item.q + "</h3>";
-    item.a.forEach((txt, ai) => {
-      const b = document.createElement("button");
-      b.className = "opt"; b.textContent = txt;
-      b.onclick = () => answer(q, b, ai, item.c);
-      q.appendChild(b);
-    });
-    body.appendChild(q);
-  });
-}
-function answer(q, btn, ai, correct){
-  const opts = q.querySelectorAll(".opt");
-  if ([...opts].some(o => o.disabled)) return;
-  opts.forEach(o => o.disabled = true);
-  opts[correct].classList.add("correct");
-  if (ai === correct) score++; else btn.classList.add("wrong");
-  answered++;
-  document.getElementById("score").textContent = "Счёт: " + score + " из " + QUESTIONS.length;
-  if (answered === QUESTIONS.length) finish();
-}
-function finish(){
-  const r = document.getElementById("result");
-  document.getElementById("res-score").textContent = score + " из " + QUESTIONS.length;
-  const t = score === 6 ? "Отлично! Ты знаешь войну 1812 года как настоящий историк." :
-            score >= 4 ? "Хороший результат! Перечитай хронологию — и будет отлично." :
-            "Перечитай разделы проекта и попробуй ещё раз.";
-  document.getElementById("res-text").textContent = t;
-  r.style.display = "block";
-  document.getElementById("restart").style.display = "inline-block";
-}
-render();
-</script>
 </body>
 </html>
